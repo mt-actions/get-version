@@ -1,0 +1,28 @@
+name: 'Get the version of the package'
+description: 'Gets the current version of package'
+inputs:
+  package_type:
+    description: 'The type of package to be published'
+    required: true
+outputs:
+  version:
+    description: 'The retrieved version'
+    value: ${{ env.VERSION }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get version from poetry
+      if: ${{ inputs.package_type == 'python' }}
+      shell: bash
+      run: |
+        PKG_VERSION=$(poetry version --short)
+        echo "CURRENT_VERSION=v$PKG_VERSION" >> $GITHUB_ENV
+
+    - name: Get version from csproj
+      if: ${{ inputs.project_type == 'csharp' }}
+      shell: pwsh
+      run: |
+        $XML = [Xml] (Get-Content .\jx.cs.core.csproj)
+        $PKG_VERSION = $XML.Project.PropertyGroup.Version
+        Add-Content -Path $env:GITHUB_ENV -Value "VERSION=$PKG_VERSION"
