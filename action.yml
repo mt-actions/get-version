@@ -26,9 +26,10 @@ runs:
       run: |
         PKG_VERSION=$(poetry version --short)
         echo "CURRENT_VERSION=v$PKG_VERSION" >> $GITHUB_ENV
+        echo ${{ env.VERSION }}
 
     - name: Get version from csproj
-      if: ${{ inputs.project_type == 'csharp' }}
+      if: ${{ inputs.package_type == 'csharp' }}
       shell: pwsh
       run: |
         $XML = [Xml] (Get-Content ${{ env.PATH }}/*.csproj)
