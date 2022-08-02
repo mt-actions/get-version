@@ -31,7 +31,6 @@ runs:
       if: ${{ inputs.project_type == 'csharp' }}
       shell: pwsh
       run: |
-        echo "Running Get version from csproj"
         $XML = [Xml] (Get-Content ${{ env.PATH }}/*.csproj)
         $PKG_VERSION = $XML.Project.PropertyGroup.Version
-        Add-Content -Path $env:GITHUB_ENV -Value "VERSION=$PKG_VERSION"
+        Add-Content -Path $env:GITHUB_ENV -Value "VERSION=0.2.0"
