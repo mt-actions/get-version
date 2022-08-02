@@ -4,6 +4,14 @@ inputs:
   package_type:
     description: 'The type of package to be published'
     required: true
+    type: string
+  path:
+    description: 'The type of package to be published'
+    required: false
+    default: './'
+    type: string
+    
+
 outputs:
   version:
     description: 'The retrieved version'
@@ -23,6 +31,6 @@ runs:
       if: ${{ inputs.project_type == 'csharp' }}
       shell: pwsh
       run: |
-        $XML = [Xml] (Get-Content .\jx.cs.core.csproj)
+        $XML = [Xml] (Get-Content ${{ inputs.path }}/*.csproj)
         $PKG_VERSION = $XML.Project.PropertyGroup.Version
         Add-Content -Path $env:GITHUB_ENV -Value "VERSION=$PKG_VERSION"
